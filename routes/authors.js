@@ -38,5 +38,14 @@ router.post('/', async(req, res) => {
     }
 })
 
+router.delete('/:id', async(req, res) => {
+    try {
+        await Author.deleteOne({_id: req.params.id})
+        res.redirect('/authors')
+    } catch {
+        res.redirect('/authors')
+    }
+})
+
 
 module.exports=router;
