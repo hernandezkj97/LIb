@@ -1,12 +1,13 @@
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 const express = require("express");
 const app = express();
 const expressLayouts=require("express-ejs-layouts");
 const indexRouter = require("./routes/index");
 const authorRouter = require("./routes/authors");
 const bodyParser = require("body-parser");
-const connectDB = require('./db/connect');
-require('dotenv').config();
-
+const mongoose = require("mongoose");
 app.use(bodyParser.urlencoded({limit:'10mb', extended:false}))
 
 app.set( "view engine", "ejs" )
@@ -15,18 +16,13 @@ app.set('layout', 'layouts/layouts');
 app.use(expressLayouts);
 app.use(express.static('public'))
 
-const port = process.env.PORT || 5000;
-
-async function start() {
-    try {
-        await connectDB(process.env.DATABASE_URL);
-        app.listen(port, () => console.log(`Server is listening on port ${port}...`)
-        );
-    } catch (error) {
-        console.log(error);
-    }
-}
-  start();
+const port = process.env.PORT || 3000;
+mongoose.connect(process.env.DATABASE_URL, {
+    useNewUrlParser: true,
+})
+const db = mongoose.connection
+db.on('error', error => console.error(error))
+db.once('open', () => console.log('Database connection Open.'))
 
 app.use('/', indexRouter)
 app.use('/authors', authorRouter)
