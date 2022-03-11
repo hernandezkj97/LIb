@@ -16,13 +16,15 @@ app.set('layout', 'layouts/layouts');
 app.use(expressLayouts);
 app.use(express.static('public'))
 
-const port = process.env.PORT || 3000;
 mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true,
 })
 const db = mongoose.connection
 db.on('error', error => console.error(error))
 db.once('open', () => console.log('Database connection Open.'))
+app.listen ( process.env.PORT || 3000);
+
+
 
 app.use('/', indexRouter)
 app.use('/authors', authorRouter)
