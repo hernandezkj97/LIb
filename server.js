@@ -1,5 +1,5 @@
 if(process.env.NODE_ENV !== 'production'){
-    require('dotenv').parse();
+    require('dotenv').config();
 }
 
 const express = require("express")
@@ -7,6 +7,7 @@ const app = express()
 const expressLayouts=require("express-ejs-layouts")
 const mongoose = require("mongoose")
 const indexRouter = require("./routes/index")
+const authorsRouter = require("./routes/authors")
 
 app.set( "view engine", "ejs" )
 app.set( "views",__dirname+ "/views")
@@ -22,3 +23,4 @@ db.once('open', () => console.log('Connected to Mongoose'))
 app.listen(process.env.PORT || 3000)
 
 app.use('/', indexRouter)
+app.use('/authors', authorsRouter)
