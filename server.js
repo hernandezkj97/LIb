@@ -1,14 +1,11 @@
-if(process.env.NODE_ENV !== 'production'){
-    require('dotenv').config();
-}
-
-const express = require("express")
-const app = express()
-const expressLayouts=require("express-ejs-layouts")
-const mongoose = require("mongoose")
-const indexRouter = require("./routes/index")
-const authorsRouter = require("./routes/authors")
-const bodyParser = require("body-parser")
+const express = require("express");
+const app = express();
+const expressLayouts=require("express-ejs-layouts");
+const indexRouter = require("./routes/index");
+const authorRouter = require("./routes/authors");
+const bodyParser = require("body-parser");
+const connectDB = require('./db/connect');
+require('dotenv').config();
 
 app.use(bodyParser.urlencoded({limit:'10mb', extended:false}))
 
@@ -17,13 +14,19 @@ app.set( "views",__dirname+ "/views")
 app.set('layout', 'layouts/layouts');
 app.use(expressLayouts);
 app.use(express.static('public'))
-mongoose.connect(process.env.DATABASE_URL, {
-    useNewUrlParser: true,
-})
-const db=mongoose.connection
-db.on('error', error => console.error(error))
-db.once('open', () => console.log('Connected to Mongoose'))
-app.listen(process.env.PORT || 3000)
+
+const port = process.env.PORT || 5000;
+
+async function start() {
+    try {
+        await connectDB(process.env.DATABASE_URL);
+        app.listen(port, () => console.log(`Server is listening on port ${port}...`)
+        );
+    } catch (error) {
+        console.log(error);
+    }
+}
+  start();
 
 app.use('/', indexRouter)
-app.use('/authors', authorsRouter)
+app.use('/authors', authorRouter)
