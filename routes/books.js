@@ -3,43 +3,21 @@ const author = require('../models/author');
 const router = express.Router();
 const Book = require('../models/book');
 //get all books
-router.get('/', async(req, res) => {
-    let searchOptions = {}
-    if (req.query.name != null && req.query.name != '') {
-        searchOptions.name = new RegExp(req.query.name, 'i')
-    }
-    try {
-        const books = await Book.find(searchOptions) 
-    res.render('books',{
-        books: books, 
-        searchOptions:req.query});
-    }catch {
-        res.redirect('/')
-    }
+router.get('/', (req, res) => {
+    res.send("All Books")
 })
 //get one book
 router.get('/new',(req, res) => {
-    res.render('books/new', {book: new Book()})
+    res.send('New Book')
 })
 //post new book
-router.post('/', async(req, res) => {
-    try {
-        const book = new Book({
-            title: req.body.title,
-    })
-    }catch {
-        res.render('books/new')
-    }
+router.post('/', (req, res) => {
+    res.send("Create Book")
+});
 
-})
-
-router.delete('/:id', async(req, res) => {
-    try {
-        await Book.deleteOne({_id: req.params.id})
-        res.redirect('/books')
-    } catch {
-        res.redirect('/books')
-    }
+//delete book
+router.delete('/', (req, res) => {
+    res.send("Delete Book")
 })
 
 

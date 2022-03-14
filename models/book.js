@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 const bookSchema = new mongoose.Schema({
     title: {
-        type: string,
+        type: String,
         required: true,
     },
     description: {
-        type: string,
+        type: String,
 
     },
     publishDate:{
@@ -23,7 +23,7 @@ const bookSchema = new mongoose.Schema({
         default: Date.now,
     },
     coverImageName:{
-        type: string,
+        type: String,
         required: true,
     },
     author:{
