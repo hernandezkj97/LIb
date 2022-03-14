@@ -1,5 +1,5 @@
 const express = require('express');
-const author = require('../models/author');
+const Author = require('../models/author');
 const router = express.Router();
 const Book = require('../models/book');
 //get all books
@@ -7,8 +7,19 @@ router.get('/', (req, res) => {
     res.send("All Books")
 })
 //get one book
-router.get('/new',(req, res) => {
-    res.send('New Book')
+router.get('/new',async(req, res) => {
+    try {
+        const authors= await Author.find({})
+        const book=new Book()
+        res.render('books/new',{
+            authors: authors,
+            book: book
+        })
+    } catch{
+        res.redirect('/books')
+
+        
+    }
 })
 //post new book
 router.post('/', (req, res) => {
